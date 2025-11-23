@@ -11,6 +11,8 @@ export interface Notification {
   content: string;
   isRead: boolean;
   createdAt: string;
+  targetId?: string; // ID of the post or video
+  targetType?: 'video' | 'post';
 }
 
 export interface User {

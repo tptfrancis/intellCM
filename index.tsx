@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { GoogleGenAI } from "@google/genai";
@@ -38,7 +39,8 @@ import {
   Link as LinkIcon,
   MessageSquare,
   Twitter,
-  ChevronDown
+  ChevronDown,
+  ArrowLeft
 } from 'lucide-react';
 import { 
   User, 
@@ -106,7 +108,7 @@ const Navigation = ({ activeTab, setActiveTab, isMobileMenuOpen, toggleMobileMen
                 setActiveTab(item.id);
                 toggleMobileMenu();
               }}
-              className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 text-sm font-medium ${
+              className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 text-sm font-medium active:scale-95 transform ${
                 activeTab === item.id
                   ? 'bg-tcm-100 dark:bg-tcm-900/30 text-tcm-800 dark:text-tcm-300 shadow-sm'
                   : 'text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-tcm-700 dark:hover:text-tcm-300'
@@ -121,7 +123,7 @@ const Navigation = ({ activeTab, setActiveTab, isMobileMenuOpen, toggleMobileMen
         <div className="p-4 border-t border-[#e6e0d4] dark:border-stone-800 space-y-3">
           <button 
              onClick={toggleTheme}
-             className="w-full flex items-center gap-3 px-4 py-2 text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 rounded-lg transition-colors text-sm font-medium"
+             className="w-full flex items-center gap-3 px-4 py-2 text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 rounded-lg transition-colors text-sm font-medium active:scale-95 transform"
           >
              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
              {isDarkMode ? '切換亮色模式' : '切換深色模式'}
@@ -130,7 +132,7 @@ const Navigation = ({ activeTab, setActiveTab, isMobileMenuOpen, toggleMobileMen
           {currentUser.role === UserRole.GUEST ? (
             <button 
               onClick={onLogin}
-              className="w-full bg-tcm-600 text-white p-3 rounded-xl flex items-center justify-center gap-2 hover:bg-tcm-700 transition-colors shadow-sm"
+              className="w-full bg-tcm-600 text-white p-3 rounded-xl flex items-center justify-center gap-2 hover:bg-tcm-700 transition-all shadow-sm active:scale-95 transform"
             >
               <LogIn size={18} />
               <span className="font-bold">登入帳號</span>
@@ -139,7 +141,7 @@ const Navigation = ({ activeTab, setActiveTab, isMobileMenuOpen, toggleMobileMen
              <div className="space-y-3">
                  <button 
                     onClick={onLogout}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-stone-600 dark:text-stone-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors text-sm font-medium"
+                    className="w-full flex items-center gap-3 px-4 py-2 text-stone-600 dark:text-stone-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-all text-sm font-medium active:scale-95 transform"
                  >
                     <LogOut size={18} />
                     登出
@@ -159,7 +161,7 @@ const Navigation = ({ activeTab, setActiveTab, isMobileMenuOpen, toggleMobileMen
 };
 
 // 2. Home View
-const HomeView = ({ setActiveTab, currentUser, videos, posts, triggerLogin }: any) => {
+const HomeView = ({ setActiveTab, currentUser, videos, posts, triggerLogin, goToVideo, goToPost }: any) => {
   const featuredVideo = videos[0];
   const latestPost = posts.find((p: any) => p.status === 'published');
 
@@ -174,7 +176,7 @@ const HomeView = ({ setActiveTab, currentUser, videos, posts, triggerLogin }: an
         </div>
         <button 
            onClick={() => currentUser.role === UserRole.GUEST ? triggerLogin() : setActiveTab('profile')}
-           className="relative p-2 bg-white dark:bg-stone-800 rounded-full border border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400 hover:text-tcm-600 dark:hover:text-tcm-400"
+           className="relative p-2 bg-white dark:bg-stone-800 rounded-full border border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400 hover:text-tcm-600 dark:hover:text-tcm-400 transition-all active:scale-95"
         >
           <Bell size={20} />
           {currentUser.notifications.some((n: any) => !n.isRead) && (
@@ -185,28 +187,28 @@ const HomeView = ({ setActiveTab, currentUser, videos, posts, triggerLogin }: an
 
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <button onClick={() => setActiveTab('chat')} className="bg-gradient-to-br from-tcm-500 to-tcm-600 dark:from-tcm-600 dark:to-tcm-800 text-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-left group">
+        <button onClick={() => setActiveTab('chat')} className="bg-gradient-to-br from-tcm-500 to-tcm-600 dark:from-tcm-600 dark:to-tcm-800 text-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-left group active:scale-95">
           <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
             <MessageCircle size={24} />
           </div>
           <div className="font-bold">AI 問診</div>
           <div className="text-xs text-tcm-100 mt-1">立即諮詢健康問題</div>
         </button>
-        <button onClick={() => setActiveTab('videos')} className="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 p-4 rounded-xl shadow-sm hover:shadow-md transition-all text-left group hover:border-tcm-300 dark:hover:border-tcm-700">
+        <button onClick={() => setActiveTab('videos')} className="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 p-4 rounded-xl shadow-sm hover:shadow-md transition-all text-left group hover:border-tcm-300 dark:hover:border-tcm-700 active:scale-95">
            <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
             <PlaySquare size={24} />
           </div>
           <div className="font-bold text-stone-800 dark:text-stone-100">觀看課程</div>
           <div className="text-xs text-stone-500 dark:text-stone-400 mt-1">學習養生知識</div>
         </button>
-        <button onClick={() => setActiveTab('forum')} className="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 p-4 rounded-xl shadow-sm hover:shadow-md transition-all text-left group hover:border-tcm-300 dark:hover:border-tcm-700">
+        <button onClick={() => setActiveTab('forum')} className="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 p-4 rounded-xl shadow-sm hover:shadow-md transition-all text-left group hover:border-tcm-300 dark:hover:border-tcm-700 active:scale-95">
            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
             <Layout size={24} />
           </div>
           <div className="font-bold text-stone-800 dark:text-stone-100">參與討論</div>
           <div className="text-xs text-stone-500 dark:text-stone-400 mt-1">瀏覽最新話題</div>
         </button>
-        <button onClick={() => currentUser.role === UserRole.GUEST ? triggerLogin() : setActiveTab('profile')} className="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 p-4 rounded-xl shadow-sm hover:shadow-md transition-all text-left group hover:border-tcm-300 dark:hover:border-tcm-700">
+        <button onClick={() => currentUser.role === UserRole.GUEST ? triggerLogin() : setActiveTab('profile')} className="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 p-4 rounded-xl shadow-sm hover:shadow-md transition-all text-left group hover:border-tcm-300 dark:hover:border-tcm-700 active:scale-95">
            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
             <UserIcon size={24} />
           </div>
@@ -221,15 +223,15 @@ const HomeView = ({ setActiveTab, currentUser, videos, posts, triggerLogin }: an
           <section>
              <div className="flex justify-between items-center mb-4">
                 <h2 className="font-bold text-lg text-stone-800 dark:text-stone-100">推薦影片</h2>
-                <button onClick={() => setActiveTab('videos')} className="text-sm text-tcm-600 dark:text-tcm-400 font-medium">查看更多</button>
+                <button onClick={() => setActiveTab('videos')} className="text-sm text-tcm-600 dark:text-tcm-400 font-medium hover:underline">查看更多</button>
              </div>
-             <div onClick={() => setActiveTab('videos')} className="bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700 overflow-hidden flex cursor-pointer group hover:shadow-md transition-shadow">
+             <div onClick={() => goToVideo(featuredVideo)} className="bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700 overflow-hidden flex cursor-pointer group hover:shadow-md transition-all active:scale-[0.99]">
                 <div className="w-1/3 relative">
-                   <img src={featuredVideo.thumbnailUrl} className="w-full h-full object-cover" />
+                   <img src={featuredVideo.thumbnailUrl} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                    {featuredVideo.isPaid && <div className="absolute top-2 left-2 bg-amber-400 text-white text-[10px] px-1.5 py-0.5 rounded font-bold shadow-sm">VIP</div>}
                 </div>
                 <div className="p-4 flex-1">
-                   <h3 className="font-bold text-stone-900 dark:text-stone-100 mb-2 group-hover:text-tcm-600 dark:group-hover:text-tcm-400">{featuredVideo.title}</h3>
+                   <h3 className="font-bold text-stone-900 dark:text-stone-100 mb-2 group-hover:text-tcm-600 dark:group-hover:text-tcm-400 transition-colors">{featuredVideo.title}</h3>
                    <p className="text-sm text-stone-500 dark:text-stone-400 line-clamp-2 mb-3">{featuredVideo.description}</p>
                    <div className="flex items-center gap-2 text-xs text-stone-400 dark:text-stone-500">
                       <span>{featuredVideo.views} 次觀看</span>
@@ -243,15 +245,15 @@ const HomeView = ({ setActiveTab, currentUser, videos, posts, triggerLogin }: an
           <section>
              <div className="flex justify-between items-center mb-4">
                 <h2 className="font-bold text-lg text-stone-800 dark:text-stone-100">熱門討論</h2>
-                <button onClick={() => setActiveTab('forum')} className="text-sm text-tcm-600 dark:text-tcm-400 font-medium">查看更多</button>
+                <button onClick={() => setActiveTab('forum')} className="text-sm text-tcm-600 dark:text-tcm-400 font-medium hover:underline">查看更多</button>
              </div>
              {latestPost && (
-                 <div onClick={() => setActiveTab('forum')} className="bg-white dark:bg-stone-800 p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm cursor-pointer hover:border-tcm-300 dark:hover:border-tcm-700 transition-colors">
+                 <div onClick={() => goToPost(latestPost.id)} className="bg-white dark:bg-stone-800 p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm cursor-pointer hover:border-tcm-300 dark:hover:border-tcm-700 transition-all active:scale-[0.99]">
                      <div className="flex items-center gap-2 mb-2">
                         <span className="bg-tcm-50 dark:bg-tcm-900/30 text-tcm-700 dark:text-tcm-300 px-2 py-0.5 rounded text-xs font-medium">熱門</span>
                         <span className="text-xs text-stone-400">{latestPost.createdAt}</span>
                      </div>
-                     <h3 className="font-bold text-stone-900 dark:text-stone-100 mb-2">{latestPost.title}</h3>
+                     <h3 className="font-bold text-stone-900 dark:text-stone-100 mb-2 group-hover:text-tcm-600">{latestPost.title}</h3>
                      <p className="text-sm text-stone-600 dark:text-stone-300 line-clamp-2 mb-3">{latestPost.content}</p>
                      <div className="flex items-center gap-4 text-xs text-stone-500 dark:text-stone-400">
                         <span className="flex items-center gap-1"><Heart size={12}/> {latestPost.likes}</span>
@@ -264,7 +266,7 @@ const HomeView = ({ setActiveTab, currentUser, videos, posts, triggerLogin }: an
 
         {/* Sidebar Widgets */}
         <div className="space-y-6">
-           <div className="bg-gradient-to-b from-tcm-50 to-white dark:from-stone-800 dark:to-stone-900 p-5 rounded-xl border border-tcm-100 dark:border-stone-700">
+           <div className="bg-gradient-to-b from-tcm-50 to-white dark:from-stone-800 dark:to-stone-900 p-5 rounded-xl border border-tcm-100 dark:border-stone-700 shadow-sm">
               <h3 className="font-bold text-tcm-800 dark:text-tcm-300 mb-3 flex items-center gap-2">
                  <Clock size={18} /> 
                  養生時鐘
@@ -415,7 +417,7 @@ const ChatView = ({ currentUser, triggerLogin }: any) => {
         <div className="p-3">
            <button 
              onClick={handleNewChat}
-             className="w-full flex items-center justify-center gap-2 bg-tcm-600 text-white py-2.5 rounded-lg font-medium hover:bg-tcm-700 transition-colors shadow-sm"
+             className="w-full flex items-center justify-center gap-2 bg-tcm-600 text-white py-2.5 rounded-lg font-medium hover:bg-tcm-700 transition-all shadow-sm active:scale-95"
             >
              <Plus size={18} /> 新增對話
            </button>
@@ -462,7 +464,7 @@ const ChatView = ({ currentUser, triggerLogin }: any) => {
         <header className="h-16 border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 flex items-center justify-between px-4 sticky top-0 z-10">
            <div className="flex items-center gap-3">
               {!isSidebarOpen && (
-                <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg text-stone-500 dark:text-stone-400">
+                <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg text-stone-500 dark:text-stone-400 active:scale-95 transition-transform">
                    <Layout size={20} />
                 </button>
               )}
@@ -529,7 +531,7 @@ const ChatView = ({ currentUser, triggerLogin }: any) => {
               />
               <button
                 onClick={handleSend}
-                className="absolute right-2 p-2 bg-tcm-600 text-white rounded-full hover:bg-tcm-700 transition-all"
+                className="absolute right-2 p-2 bg-tcm-600 text-white rounded-full hover:bg-tcm-700 transition-all active:scale-95"
               >
                 <Send size={18} />
               </button>
@@ -541,12 +543,12 @@ const ChatView = ({ currentUser, triggerLogin }: any) => {
 };
 
 // 4. Forum Component
-const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: any) => {
+const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser, viewingPostId, setViewingPostId }: any) => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [activeFilter, setActiveFilter] = useState('全部');
-    const [sortBy, setSortBy] = useState('newest'); // 'newest', 'oldest', 'likes'
-    const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+    const [sortBy, setSortBy] = useState('newest'); 
     const [commentInput, setCommentInput] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
   
     const handleCreatePost = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -600,14 +602,138 @@ const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: a
 
     // Filter and Sort Logic
     const displayedPosts = posts
-      .filter((post: ForumPost) => post.status === 'published') // Only show published in main feed
+      .filter((post: ForumPost) => post.status === 'published')
       .filter((post: ForumPost) => activeFilter === '全部' || post.category === activeFilter)
+      .filter((post: ForumPost) => post.title.includes(searchQuery) || post.content.includes(searchQuery))
       .sort((a: ForumPost, b: ForumPost) => {
           if (sortBy === 'likes') return b.likes - a.likes;
           if (sortBy === 'oldest') return a.id.localeCompare(b.id);
-          return b.id.localeCompare(a.id); // Default newest (using ID as proxy for time in mock)
+          return b.id.localeCompare(a.id);
       });
+    
+    // --- Detail View ---
+    if (viewingPostId) {
+        const post = posts.find((p: any) => p.id === viewingPostId);
+        if (!post) return <div>找不到文章</div>;
+        const author = MOCK_USERS[post.authorId] || GUEST_USER;
+
+        return (
+            <div className="max-w-4xl mx-auto p-6 animate-in slide-in-from-right duration-200">
+                <button onClick={() => setViewingPostId(null)} className="mb-6 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 flex items-center gap-2 transition-colors active:scale-95 transform">
+                    <ArrowLeft size={20} /> 返回討論區
+                </button>
+
+                <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 p-8">
+                    {/* Post Header */}
+                    <div className="flex gap-2 mb-4">
+                        <span className="bg-tcm-50 dark:bg-tcm-900/30 text-tcm-700 dark:text-tcm-300 px-3 py-1 rounded-full text-xs font-bold">{post.category}</span>
+                        {post.tags.map((tag: string) => (
+                             <span key={tag} className="bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 px-3 py-1 rounded-full text-xs">#{tag}</span>
+                        ))}
+                    </div>
+
+                    <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100 mb-6">{post.title}</h1>
+
+                    <div className="flex items-center gap-4 mb-8 border-b border-stone-100 dark:border-stone-800 pb-6">
+                        <img 
+                            src={author.avatarUrl} 
+                            onClick={(e) => { e.stopPropagation(); onViewUser(author.id); }}
+                            className="w-12 h-12 rounded-full cursor-pointer hover:opacity-80 transition-opacity" 
+                        />
+                        <div>
+                             <div className="flex items-center gap-2">
+                                <span className="font-bold text-stone-900 dark:text-stone-100 cursor-pointer hover:text-tcm-600" onClick={(e) => { e.stopPropagation(); onViewUser(author.id); }}>{author.name}</span>
+                                {author.role === UserRole.MASTER && (
+                                    <span className="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">中醫師</span>
+                                )}
+                             </div>
+                             <div className="text-xs text-stone-500 dark:text-stone-400 flex items-center gap-2">
+                                <span>{post.createdAt}</span>
+                                <span>•</span>
+                                <span>{post.views} 次瀏覽</span>
+                             </div>
+                        </div>
+                    </div>
+
+                    <div className="text-lg leading-relaxed text-stone-800 dark:text-stone-200 mb-8 whitespace-pre-wrap">
+                        {post.content}
+                    </div>
+
+                    <div className="flex items-center gap-6 pt-6 border-t border-stone-100 dark:border-stone-800">
+                         <button onClick={() => attemptAction(() => {})} className="flex items-center gap-2 text-stone-500 dark:text-stone-400 hover:text-pink-500 transition-colors active:scale-95 transform">
+                             <Heart size={24} />
+                             <span className="font-medium">{post.likes} 個愛心</span>
+                         </button>
+                         <button className="flex items-center gap-2 text-stone-500 dark:text-stone-400 hover:text-tcm-600 transition-colors active:scale-95 transform">
+                             <Share2 size={24} />
+                             <span className="font-medium">分享</span>
+                         </button>
+                    </div>
+                </div>
+
+                {/* Comments Section */}
+                <div className="mt-8">
+                     <h3 className="font-bold text-xl text-stone-800 dark:text-stone-100 mb-6 flex items-center gap-2">
+                        <MessageCircle size={24} />
+                        留言 ({post.comments.length})
+                     </h3>
+                     
+                     <div className="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800 mb-8">
+                        <div className="flex gap-4">
+                            <img src={currentUser.avatarUrl} className="w-10 h-10 rounded-full" />
+                            <div className="flex-1">
+                                <textarea
+                                    value={commentInput}
+                                    onChange={(e) => setCommentInput(e.target.value)}
+                                    placeholder={currentUser.role === UserRole.GUEST ? "請先登入..." : "撰寫您的留言..."}
+                                    className="w-full bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl p-3 focus:ring-2 focus:ring-tcm-500 outline-none resize-none mb-2"
+                                    rows={3}
+                                />
+                                <div className="flex justify-end">
+                                    <button 
+                                        onClick={() => attemptAction(() => handleAddComment(post.id))}
+                                        className="bg-tcm-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-tcm-700 transition-all active:scale-95 transform disabled:opacity-50"
+                                        disabled={!commentInput.trim() || currentUser.role === UserRole.GUEST}
+                                    >
+                                        發送留言
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+
+                     <div className="space-y-4">
+                        {post.comments.map((comment: any) => {
+                             const cAuthor = MOCK_USERS[comment.authorId] || GUEST_USER;
+                             return (
+                                 <div key={comment.id} className="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800">
+                                     <div className="flex gap-4">
+                                         <img 
+                                            src={cAuthor.avatarUrl} 
+                                            className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80"
+                                            onClick={(e) => { e.stopPropagation(); onViewUser(cAuthor.id); }}
+                                         />
+                                         <div className="flex-1">
+                                             <div className="flex justify-between items-start mb-2">
+                                                 <div className="flex items-center gap-2">
+                                                     <span className="font-bold text-stone-900 dark:text-stone-100 cursor-pointer" onClick={(e) => { e.stopPropagation(); onViewUser(cAuthor.id); }}>{cAuthor.name}</span>
+                                                     {cAuthor.role === UserRole.MASTER && <span className="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">中醫師</span>}
+                                                 </div>
+                                                 <span className="text-xs text-stone-400">{comment.createdAt}</span>
+                                             </div>
+                                             <p className="text-stone-700 dark:text-stone-300 leading-relaxed">{comment.text}</p>
+                                         </div>
+                                     </div>
+                                 </div>
+                             );
+                        })}
+                     </div>
+                </div>
+            </div>
+        );
+    }
   
+    // --- List View ---
     return (
       <div className="max-w-5xl mx-auto p-6 space-y-6">
         <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -617,21 +743,21 @@ const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: a
           </div>
           <button 
             onClick={() => attemptAction(() => setIsCreateModalOpen(true))}
-            className="bg-tcm-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-tcm-700 transition-colors flex items-center gap-2 shadow-sm"
+            className="bg-tcm-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-tcm-700 transition-all flex items-center gap-2 shadow-sm active:scale-95 transform"
           >
             <Plus size={18} />
             發起討論
           </button>
         </header>
   
-        {/* Filters and Sort */}
-        <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-stone-800 p-3 rounded-xl border border-stone-200 dark:border-stone-700">
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+        {/* Filters and Search */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-stone-800 p-4 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0">
               {['全部', '藥膳食療', '針灸推拿', '中醫理論', '臨床經驗'].map((filter) => (
                 <button 
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap border transition-all ${
+                  className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap border transition-all active:scale-95 transform ${
                     activeFilter === filter 
                       ? 'bg-stone-800 dark:bg-stone-100 text-white dark:text-stone-900 border-stone-800 dark:border-stone-100 shadow' 
                       : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-400 border-stone-200 dark:border-stone-600 hover:border-tcm-500 hover:text-tcm-600'
@@ -641,27 +767,42 @@ const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: a
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-2 min-w-max">
-                <span className="text-xs font-bold text-stone-500 dark:text-stone-400">排序：</span>
-                <select 
-                    value={sortBy} 
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="text-sm bg-stone-50 dark:bg-stone-700 border border-stone-200 dark:border-stone-600 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-tcm-500"
-                >
-                    <option value="newest">最新發布</option>
-                    <option value="oldest">最早發布</option>
-                    <option value="likes">最多愛心</option>
-                </select>
+            
+            <div className="flex items-center gap-4">
+                <div className="relative flex-1 md:w-64">
+                    <input 
+                        type="text" 
+                        placeholder="搜尋文章..." 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-stone-50 dark:bg-stone-700 border border-stone-200 dark:border-stone-600 rounded-lg pl-9 pr-3 py-1.5 text-sm focus:ring-1 focus:ring-tcm-500 outline-none"
+                    />
+                    <Search className="absolute left-2.5 top-2 text-stone-400" size={16} />
+                </div>
+                <div className="flex items-center gap-2 min-w-max">
+                    <select 
+                        value={sortBy} 
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="text-sm bg-stone-50 dark:bg-stone-700 border border-stone-200 dark:border-stone-600 rounded-lg px-2 py-1.5 outline-none focus:ring-1 focus:ring-tcm-500 cursor-pointer"
+                    >
+                        <option value="newest">最新發布</option>
+                        <option value="oldest">最早發布</option>
+                        <option value="likes">最多愛心</option>
+                    </select>
+                </div>
             </div>
         </div>
   
         <div className="space-y-4">
-          {displayedPosts.map((post: ForumPost) => {
+          {displayedPosts.length > 0 ? displayedPosts.map((post: ForumPost) => {
               const author = MOCK_USERS[post.authorId] || GUEST_USER;
-              const isExpanded = expandedPostId === post.id;
   
               return (
-              <article key={post.id} className="bg-white dark:bg-stone-900 p-6 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow-md transition-shadow">
+              <article 
+                key={post.id} 
+                onClick={() => setViewingPostId(post.id)}
+                className="bg-white dark:bg-stone-900 p-6 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow-md transition-all cursor-pointer group active:scale-[0.99] transform"
+              >
                   <div className="flex items-start gap-4">
                     <img 
                         src={author.avatarUrl} 
@@ -681,23 +822,23 @@ const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: a
                           <span className="text-stone-400 text-xs">• {post.createdAt}</span>
                         </div>
                         
-                        <h3 className="text-lg font-bold text-stone-800 dark:text-stone-100 mb-2 hover:text-tcm-700 cursor-pointer" onClick={() => setExpandedPostId(isExpanded ? null : post.id)}>
+                        <h3 className="text-lg font-bold text-stone-800 dark:text-stone-100 mb-2 group-hover:text-tcm-700 transition-colors">
                           {post.title}
                         </h3>
-                        <p className={`text-stone-600 dark:text-stone-300 leading-relaxed mb-4 ${!isExpanded && 'line-clamp-2'}`}>
+                        <p className="text-stone-600 dark:text-stone-300 leading-relaxed mb-4 line-clamp-2">
                           {post.content}
                         </p>
                         
                         <div className="flex items-center justify-between border-t border-stone-50 dark:border-stone-800 pt-4">
                           <div className="flex items-center gap-4">
-                              <button onClick={() => attemptAction(() => {})} className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400 hover:text-pink-500 transition-colors group">
-                                <Heart size={18} className="group-active:scale-125 transition-transform" />
+                              <div className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400">
+                                <Heart size={18} />
                                 <span className="text-sm font-medium">{post.likes}</span>
-                              </button>
-                              <button onClick={() => setExpandedPostId(isExpanded ? null : post.id)} className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400 hover:text-tcm-600 transition-colors">
+                              </div>
+                              <div className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400">
                                 <MessageCircle size={18} />
                                 <span className="text-sm font-medium">{post.comments.length} 則留言</span>
-                              </button>
+                              </div>
                               <div className="flex items-center gap-1 text-stone-400 text-xs">
                                  <Eye size={14} /> {post.views}
                               </div>
@@ -708,58 +849,16 @@ const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: a
                               ))}
                           </div>
                         </div>
-  
-                        {/* Expanded Comments Section */}
-                        {isExpanded && (
-                          <div className="mt-4 bg-stone-50 dark:bg-stone-800/50 rounded-xl p-4 border border-stone-100 dark:border-stone-800 animate-in fade-in slide-in-from-top-2 duration-200">
-                            <div className="space-y-4 mb-4">
-                              {post.comments.length > 0 ? post.comments.map(comment => {
-                                const cAuthor = MOCK_USERS[comment.authorId] || GUEST_USER;
-                                return (
-                                  <div key={comment.id} className="flex gap-3">
-                                    <img 
-                                        src={cAuthor.avatarUrl} 
-                                        className="w-8 h-8 rounded-full cursor-pointer" 
-                                        onClick={(e) => { e.stopPropagation(); onViewUser(cAuthor.id); }}
-                                    />
-                                    <div className="flex-1">
-                                      <div className="flex items-center gap-2">
-                                        <span 
-                                            className="text-sm font-bold text-stone-800 dark:text-stone-200 cursor-pointer"
-                                            onClick={(e) => { e.stopPropagation(); onViewUser(cAuthor.id); }}
-                                        >{cAuthor.name}</span>
-                                        <span className="text-xs text-stone-400">{comment.createdAt}</span>
-                                      </div>
-                                      <p className="text-sm text-stone-700 dark:text-stone-300 mt-0.5">{comment.text}</p>
-                                    </div>
-                                  </div>
-                                );
-                              }) : (
-                                <p className="text-center text-stone-400 text-sm py-2">目前還沒有留言，成為第一個發言的人吧！</p>
-                              )}
-                            </div>
-                            <div className="flex gap-2">
-                              <input 
-                                value={commentInput}
-                                onChange={(e) => setCommentInput(e.target.value)}
-                                placeholder={currentUser.role === UserRole.GUEST ? "請先登入..." : "撰寫留言..."}
-                                disabled={currentUser.role === UserRole.GUEST}
-                                className="flex-1 px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-600 bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 text-sm focus:ring-2 focus:ring-tcm-500 focus:border-transparent outline-none disabled:bg-stone-100 dark:disabled:bg-stone-800"
-                              />
-                              <button 
-                                onClick={() => attemptAction(() => handleAddComment(post.id))}
-                                className="bg-tcm-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-tcm-700 disabled:opacity-50"
-                              >
-                                發送
-                              </button>
-                            </div>
-                          </div>
-                        )}
                     </div>
                   </div>
               </article>
               )
-          })}
+          }) : (
+            <div className="text-center py-20 bg-white dark:bg-stone-900 rounded-xl border border-dashed border-stone-300 dark:border-stone-700 text-stone-500">
+                <Search size={48} className="mx-auto mb-4 text-stone-300" />
+                <p>沒有找到相關的討論文章</p>
+            </div>
+          )}
         </div>
         
         {/* Create Modal */}
@@ -768,7 +867,7 @@ const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: a
                 <div className="bg-white dark:bg-stone-900 w-full max-w-lg rounded-2xl shadow-2xl p-6 scale-100 border border-stone-100 dark:border-stone-800">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-xl font-bold text-stone-800 dark:text-stone-100">發起新討論</h3>
-                    <button onClick={() => setIsCreateModalOpen(false)} className="text-stone-400 hover:text-stone-600">
+                    <button onClick={() => setIsCreateModalOpen(false)} className="text-stone-400 hover:text-stone-600 active:scale-95 transition-transform">
                     <X size={24} />
                     </button>
                 </div>
@@ -791,12 +890,12 @@ const ForumView = ({ currentUser, posts, setPosts, triggerLogin, onViewUser }: a
                         <textarea required name="content" rows={5} className="w-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg p-2.5 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-tcm-500 outline-none resize-none" placeholder="分享您的想法、經驗或問題..." />
                     </div>
                     <div className="flex justify-between pt-2">
-                        <button type="submit" name="draft" className="text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 font-medium flex items-center gap-2">
+                        <button type="submit" name="draft" className="text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 font-medium flex items-center gap-2 active:scale-95 transition-transform">
                             <Save size={16}/> 儲存草稿
                         </button>
                         <div className="flex gap-2">
-                            <button type="button" onClick={() => setIsCreateModalOpen(false)} className="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg">取消</button>
-                            <button type="submit" name="publish" className="px-6 py-2 bg-tcm-600 text-white font-medium rounded-lg hover:bg-tcm-700">發佈</button>
+                            <button type="button" onClick={() => setIsCreateModalOpen(false)} className="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg active:scale-95 transition-transform">取消</button>
+                            <button type="submit" name="publish" className="px-6 py-2 bg-tcm-600 text-white font-medium rounded-lg hover:bg-tcm-700 active:scale-95 transition-transform">發佈</button>
                         </div>
                     </div>
                 </form>
@@ -815,22 +914,22 @@ const ShareModal = ({ isOpen, onClose, url }: { isOpen: boolean, onClose: () => 
              <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl p-6 w-full max-w-sm border border-stone-200 dark:border-stone-700">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="font-bold text-lg text-stone-800 dark:text-stone-100">分享至</h3>
-                    <button onClick={onClose}><X size={20} className="text-stone-400"/></button>
+                    <button onClick={onClose} className="active:scale-95 transition-transform"><X size={20} className="text-stone-400"/></button>
                 </div>
                 <div className="grid grid-cols-4 gap-4 mb-6">
-                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600">
+                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600 active:scale-95 transition-transform">
                         <div className="w-12 h-12 bg-[#1877F2] text-white rounded-full flex items-center justify-center text-xl shadow-sm hover:scale-105 transition-transform"><Facebook size={24}/></div>
                         Facebook
                     </button>
-                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600">
+                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600 active:scale-95 transition-transform">
                          <div className="w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center text-xl shadow-sm hover:scale-105 transition-transform"><MessageSquare size={24}/></div>
                         WhatsApp
                     </button>
-                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600">
+                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600 active:scale-95 transition-transform">
                          <div className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center text-xl shadow-sm hover:scale-105 transition-transform"><Twitter size={24}/></div>
                         X
                     </button>
-                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600" onClick={() => {navigator.clipboard.writeText(url); onClose();}}>
+                    <button className="flex flex-col items-center gap-2 text-xs text-stone-600 dark:text-stone-400 hover:text-tcm-600 active:scale-95 transition-transform" onClick={() => {navigator.clipboard.writeText(url); onClose();}}>
                          <div className="w-12 h-12 bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 rounded-full flex items-center justify-center text-xl shadow-sm hover:scale-105 transition-transform"><LinkIcon size={24}/></div>
                         複製連結
                     </button>
@@ -844,10 +943,10 @@ const ShareModal = ({ isOpen, onClose, url }: { isOpen: boolean, onClose: () => 
 };
 
 // 5. Video Hub Component
-const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin, onViewUser }: any) => {
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin, onViewUser, selectedVideo, setSelectedVideo }: any) => {
   const [commentInput, setCommentInput] = useState('');
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false); // Local toggle for demo
   
   // Filter States
   const [categoryFilter, setCategoryFilter] = useState('全部');
@@ -872,6 +971,7 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
     }
 
     setSelectedVideo(video);
+    setIsSubscribed(false); // Reset subscribe state for new video
     // Add to history
     if (currentUser.role !== UserRole.GUEST && !currentUser.history.includes(video.id)) {
         setCurrentUser({
@@ -909,9 +1009,9 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
       <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} url={window.location.href} />
       
       {selectedVideo ? (
-        <div className="max-w-6xl mx-auto p-6">
-            <button onClick={() => setSelectedVideo(null)} className="mb-4 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 font-medium flex items-center gap-2 transition-colors">
-                ← 返回列表
+        <div className="max-w-6xl mx-auto p-6 animate-in slide-in-from-right duration-200">
+            <button onClick={() => setSelectedVideo(null)} className="mb-4 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 font-medium flex items-center gap-2 transition-transform active:scale-95">
+                <ArrowLeft size={20} /> 返回列表
             </button>
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-4">
@@ -926,7 +1026,7 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                          )}
 
                          <div className="absolute inset-0 flex items-center justify-center">
-                             <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-2xl border border-white/30">
+                             <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-2xl border border-white/30 active:scale-90">
                                  <div className="ml-2 w-0 h-0 border-t-[15px] border-t-transparent border-l-[25px] border-l-white border-b-[15px] border-b-transparent"></div>
                              </div>
                          </div>
@@ -951,10 +1051,10 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                                 <span>{selectedVideo.createdAt}</span>
                             </div>
                             <div className="flex gap-4">
-                                <button className="flex items-center gap-2 hover:text-tcm-600 transition-colors">
+                                <button className="flex items-center gap-2 hover:text-tcm-600 transition-colors active:scale-95 transform">
                                     <ThumbsUp size={20}/> {selectedVideo.likes}
                                 </button>
-                                <button onClick={() => setIsShareOpen(true)} className="flex items-center gap-2 hover:text-tcm-600 transition-colors">
+                                <button onClick={() => setIsShareOpen(true)} className="flex items-center gap-2 hover:text-tcm-600 transition-colors active:scale-95 transform">
                                     <Share2 size={20}/> 分享
                                 </button>
                             </div>
@@ -963,20 +1063,27 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                         <div className="flex items-start gap-4 mb-6">
                             <img 
                                 src={MOCK_USERS[selectedVideo.authorId].avatarUrl} 
-                                className="w-12 h-12 rounded-full object-cover border border-stone-100 dark:border-stone-700 cursor-pointer"
+                                className="w-12 h-12 rounded-full object-cover border border-stone-100 dark:border-stone-700 cursor-pointer hover:opacity-80 transition-opacity"
                                 onClick={() => onViewUser(selectedVideo.authorId)}
                             />
                             <div className="flex-1">
                                 <div className="flex justify-between items-center">
                                     <div>
                                         <h3 
-                                            className="font-bold text-stone-900 dark:text-stone-100 text-lg cursor-pointer hover:text-tcm-600"
+                                            className="font-bold text-stone-900 dark:text-stone-100 text-lg cursor-pointer hover:text-tcm-600 transition-colors"
                                             onClick={() => onViewUser(selectedVideo.authorId)}
                                         >{MOCK_USERS[selectedVideo.authorId].name}</h3>
                                         <p className="text-sm text-stone-500 dark:text-stone-400">{MOCK_USERS[selectedVideo.authorId].followers} 位訂閱者</p>
                                     </div>
-                                    <button className="bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 px-4 py-1.5 rounded-full text-sm hover:bg-stone-700 dark:hover:bg-stone-300">
-                                        訂閱
+                                    <button 
+                                        onClick={() => setIsSubscribed(!isSubscribed)}
+                                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all active:scale-95 transform shadow-sm ${
+                                            isSubscribed 
+                                                ? 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300' 
+                                                : 'bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 hover:bg-stone-800'
+                                        }`}
+                                    >
+                                        {isSubscribed ? '已訂閱' : '訂閱'}
                                     </button>
                                 </div>
                                 <p className="text-stone-700 dark:text-stone-300 leading-relaxed mt-4 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-lg text-sm">
@@ -996,13 +1103,13 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                                         onChange={(e) => setCommentInput(e.target.value)}
                                         placeholder={currentUser.role === UserRole.GUEST ? "請先登入..." : "新增留言..."}
                                         disabled={currentUser.role === UserRole.GUEST}
-                                        className="w-full border-b border-stone-300 dark:border-stone-600 pb-2 focus:border-tcm-600 outline-none bg-transparent text-stone-900 dark:text-stone-100"
+                                        className="w-full border-b border-stone-300 dark:border-stone-600 pb-2 focus:border-tcm-600 outline-none bg-transparent text-stone-900 dark:text-stone-100 transition-colors"
                                     />
                                     <div className="flex justify-end mt-2">
                                         <button 
                                             onClick={handleAddComment}
                                             disabled={!commentInput.trim()}
-                                            className="px-4 py-2 bg-tcm-600 text-white rounded-lg text-sm disabled:opacity-50"
+                                            className="px-4 py-2 bg-tcm-600 text-white rounded-lg text-sm disabled:opacity-50 hover:bg-tcm-700 active:scale-95 transition-all"
                                         >
                                             留言
                                         </button>
@@ -1017,13 +1124,13 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                                         <div key={c.id} className="flex gap-3">
                                             <img 
                                                 src={user?.avatarUrl} 
-                                                className="w-10 h-10 rounded-full cursor-pointer" 
+                                                className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition-opacity" 
                                                 onClick={() => onViewUser(c.authorId)}
                                             />
                                             <div>
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <span 
-                                                        className="font-semibold text-sm text-stone-900 dark:text-stone-200 cursor-pointer"
+                                                        className="font-semibold text-sm text-stone-900 dark:text-stone-200 cursor-pointer hover:text-tcm-600"
                                                         onClick={() => onViewUser(c.authorId)}
                                                     >{user?.name}</span>
                                                     <span className="text-xs text-stone-500 dark:text-stone-400">{c.createdAt}</span>
@@ -1042,7 +1149,7 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                 <div className="space-y-4">
                     <h3 className="font-bold text-stone-800 dark:text-stone-100 text-lg">接下來播放</h3>
                     {filteredVideos.filter((v: Video) => v.id !== selectedVideo.id).map((video: Video) => (
-                        <div key={video.id} onClick={() => handleVideoClick(video)} className="flex gap-3 cursor-pointer group bg-white dark:bg-stone-900 p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+                        <div key={video.id} onClick={() => handleVideoClick(video)} className="flex gap-3 cursor-pointer group bg-white dark:bg-stone-900 p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-all active:scale-[0.98] transform">
                             <div className="relative w-40 h-24 flex-shrink-0 rounded-lg overflow-hidden">
                                 <img src={video.thumbnailUrl} className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"/>
                                 <span className="absolute bottom-1 right-1 bg-black/70 text-white text-[10px] px-1 rounded">
@@ -1051,7 +1158,7 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                                 {video.isPaid && <div className="absolute top-1 left-1 bg-amber-500 text-white text-[8px] px-1 rounded font-bold">VIP</div>}
                             </div>
                             <div className="flex flex-col justify-between py-1">
-                                <h4 className="font-semibold text-sm text-stone-900 dark:text-stone-100 line-clamp-2 group-hover:text-tcm-600 leading-tight">
+                                <h4 className="font-semibold text-sm text-stone-900 dark:text-stone-100 line-clamp-2 group-hover:text-tcm-600 leading-tight transition-colors">
                                     {video.title}
                                 </h4>
                                 <div>
@@ -1082,7 +1189,7 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                         <button 
                             key={cat} 
                             onClick={() => setCategoryFilter(cat)}
-                            className={`px-3 py-1 rounded-full text-sm transition-colors ${categoryFilter === cat ? 'bg-stone-800 dark:bg-stone-100 text-white dark:text-stone-900' : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200'}`}
+                            className={`px-3 py-1 rounded-full text-sm transition-all active:scale-95 transform ${categoryFilter === cat ? 'bg-stone-800 dark:bg-stone-100 text-white dark:text-stone-900' : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200'}`}
                         >
                             {cat}
                         </button>
@@ -1094,9 +1201,9 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                         <Lock size={16} className="text-stone-400" />
                         <span className="font-bold text-sm text-stone-700 dark:text-stone-300">權限：</span>
                     </div>
-                    <button onClick={() => setPaidFilter('all')} className={`px-3 py-1 rounded-full text-sm ${paidFilter === 'all' ? 'bg-tcm-600 text-white' : 'text-stone-600 dark:text-stone-400 bg-stone-100 dark:bg-stone-800'}`}>全部</button>
-                    <button onClick={() => setPaidFilter('free')} className={`px-3 py-1 rounded-full text-sm ${paidFilter === 'free' ? 'bg-tcm-600 text-white' : 'text-stone-600 dark:text-stone-400 bg-stone-100 dark:bg-stone-800'}`}>免費</button>
-                    <button onClick={() => setPaidFilter('paid')} className={`px-3 py-1 rounded-full text-sm ${paidFilter === 'paid' ? 'bg-amber-500 text-white' : 'text-stone-600 dark:text-stone-400 bg-stone-100 dark:bg-stone-800'}`}>VIP 付費</button>
+                    <button onClick={() => setPaidFilter('all')} className={`px-3 py-1 rounded-full text-sm transition-all active:scale-95 transform ${paidFilter === 'all' ? 'bg-tcm-600 text-white' : 'text-stone-600 dark:text-stone-400 bg-stone-100 dark:bg-stone-800'}`}>全部</button>
+                    <button onClick={() => setPaidFilter('free')} className={`px-3 py-1 rounded-full text-sm transition-all active:scale-95 transform ${paidFilter === 'free' ? 'bg-tcm-600 text-white' : 'text-stone-600 dark:text-stone-400 bg-stone-100 dark:bg-stone-800'}`}>免費</button>
+                    <button onClick={() => setPaidFilter('paid')} className={`px-3 py-1 rounded-full text-sm transition-all active:scale-95 transform ${paidFilter === 'paid' ? 'bg-amber-500 text-white' : 'text-stone-600 dark:text-stone-400 bg-stone-100 dark:bg-stone-800'}`}>VIP 付費</button>
                 </div>
 
                 <div className="flex items-center gap-4 border-t border-stone-100 dark:border-stone-800 pt-4 flex-wrap">
@@ -1104,23 +1211,23 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                         <Tag size={16} className="text-stone-400" />
                         <span className="font-bold text-sm text-stone-700 dark:text-stone-300">標籤：</span>
                     </div>
-                    <button onClick={() => setTagFilter(null)} className={`px-2 py-0.5 text-xs rounded border ${!tagFilter ? 'border-tcm-500 text-tcm-600' : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400'}`}>不限</button>
+                    <button onClick={() => setTagFilter(null)} className={`px-2 py-0.5 text-xs rounded border transition-all active:scale-95 transform ${!tagFilter ? 'border-tcm-500 text-tcm-600' : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400'}`}>不限</button>
                     {allTags.map(tag => (
                         <button 
                             key={tag} 
                             onClick={() => setTagFilter(tag === tagFilter ? null : tag)}
-                            className={`px-2 py-0.5 text-xs rounded border transition-colors ${tagFilter === tag ? 'bg-tcm-50 dark:bg-tcm-900/30 border-tcm-500 text-tcm-700 dark:text-tcm-400' : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400 hover:border-stone-400'}`}
+                            className={`px-2 py-0.5 text-xs rounded border transition-all active:scale-95 transform ${tagFilter === tag ? 'bg-tcm-50 dark:bg-tcm-900/30 border-tcm-500 text-tcm-700 dark:text-tcm-400' : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400 hover:border-stone-400'}`}
                         >
                             {tag}
                         </button>
                     ))}
-                    <button onClick={() => setTagFilter('其他')} className={`px-2 py-0.5 text-xs rounded border ${tagFilter === '其他' ? 'border-tcm-500 text-tcm-600' : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400'}`}>其他</button>
+                    <button onClick={() => setTagFilter('其他')} className={`px-2 py-0.5 text-xs rounded border transition-all active:scale-95 transform ${tagFilter === '其他' ? 'border-tcm-500 text-tcm-600' : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400'}`}>其他</button>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredVideos.map((video: Video) => (
-                    <div key={video.id} onClick={() => handleVideoClick(video)} className="group cursor-pointer bg-white dark:bg-stone-900 rounded-xl border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col h-full relative">
+                    <div key={video.id} onClick={() => handleVideoClick(video)} className="group cursor-pointer bg-white dark:bg-stone-900 rounded-xl border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-md transition-all active:scale-[0.98] transform overflow-hidden flex flex-col h-full relative">
                         <div className="relative aspect-video overflow-hidden">
                             <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
@@ -1134,7 +1241,7 @@ const VideoHub = ({ videos, setVideos, currentUser, setCurrentUser, triggerLogin
                             )}
                         </div>
                         <div className="p-4 flex flex-col flex-1">
-                            <h3 className="font-bold text-stone-900 dark:text-stone-100 group-hover:text-tcm-600 line-clamp-2 mb-2 leading-snug flex-1">
+                            <h3 className="font-bold text-stone-900 dark:text-stone-100 group-hover:text-tcm-600 line-clamp-2 mb-2 leading-snug flex-1 transition-colors">
                                 {video.title}
                             </h3>
                              <div className="flex gap-2 mb-2">
@@ -1169,7 +1276,9 @@ const ProfileView = ({
   posts,
   triggerLogin,
   viewingUserId,
-  onBackToSelf
+  onBackToSelf,
+  goToVideo,
+  goToPost
 }: any) => {
   const [activeTab, setActiveTab] = useState('history'); // 'history' | 'posts' | 'notifications' | 'about'
   const [showUpload, setShowUpload] = useState(false);
@@ -1193,7 +1302,7 @@ const ProfileView = ({
               </div>
               <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">請先登入</h2>
               <p className="text-stone-500 dark:text-stone-400">登入後即可查看個人檔案、紀錄與通知。</p>
-              <button onClick={triggerLogin} className="bg-tcm-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-tcm-700 transition-colors">
+              <button onClick={triggerLogin} className="bg-tcm-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-tcm-700 transition-all active:scale-95 transform">
                   立即登入 / 註冊
               </button>
           </div>
@@ -1246,6 +1355,15 @@ const ProfileView = ({
       }
   };
 
+  const handleNotificationClick = (notification: any) => {
+      if (notification.targetType === 'video' && notification.targetId) {
+          const video = videos.find((v: Video) => v.id === notification.targetId);
+          if (video) goToVideo(video);
+      } else if (notification.targetType === 'post' && notification.targetId) {
+          goToPost(notification.targetId);
+      }
+  };
+
   const historyVideos = videos.filter((v: Video) => displayUser.history.includes(v.id));
   
   // For posts: if self, show drafts. If others, only published.
@@ -1255,7 +1373,7 @@ const ProfileView = ({
   return (
     <div className="max-w-4xl mx-auto p-6">
       {!isSelf && (
-          <button onClick={onBackToSelf} className="mb-4 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 flex items-center gap-2">
+          <button onClick={onBackToSelf} className="mb-4 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 flex items-center gap-2 active:scale-95 transition-transform">
               ← 返回我的個人中心
           </button>
       )}
@@ -1267,7 +1385,7 @@ const ProfileView = ({
           <div className="relative group">
             <img src={displayUser.avatarUrl} alt={displayUser.name} className="w-28 h-28 rounded-full border-4 border-white dark:border-stone-800 object-cover shadow-md bg-white dark:bg-stone-800" />
             {isSelf && (
-                <button className="absolute bottom-1 right-1 bg-stone-800 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                <button className="absolute bottom-1 right-1 bg-stone-800 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:scale-110 active:scale-95">
                     <Camera size={14} />
                 </button>
             )}
@@ -1288,11 +1406,11 @@ const ProfileView = ({
               {isSelf && (
                   <div className="flex gap-3">
                     {currentUser.role === UserRole.MASTER && (
-                    <button onClick={() => setShowUpload(true)} className="bg-tcm-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-tcm-700 flex items-center gap-2 text-sm shadow-sm transition-colors">
+                    <button onClick={() => setShowUpload(true)} className="bg-tcm-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-tcm-700 flex items-center gap-2 text-sm shadow-sm transition-all active:scale-95 transform">
                         <Upload size={16} /> 上傳影片
                     </button>
                     )}
-                    <button onClick={() => { setEditForm(currentUser); setIsEditMode(true); }} className="border border-stone-300 dark:border-stone-600 text-stone-700 dark:text-stone-300 px-4 py-2 rounded-lg font-medium hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2 bg-white dark:bg-stone-900">
+                    <button onClick={() => { setEditForm(currentUser); setIsEditMode(true); }} className="border border-stone-300 dark:border-stone-600 text-stone-700 dark:text-stone-300 px-4 py-2 rounded-lg font-medium hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2 bg-white dark:bg-stone-900 transition-all active:scale-95 transform">
                     <Edit3 size={16} /> 編輯資料
                     </button>
                 </div>
@@ -1310,7 +1428,7 @@ const ProfileView = ({
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-3 text-sm font-bold relative capitalize ${
+                className={`pb-3 text-sm font-bold relative capitalize transition-colors ${
                   activeTab === tab ? 'text-tcm-700 dark:text-tcm-400' : 'text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200'
                 }`}
               >
@@ -1328,13 +1446,13 @@ const ProfileView = ({
       {activeTab === 'history' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {historyVideos.length > 0 ? historyVideos.map((video: Video) => (
-            <div key={video.id} className="flex gap-3 bg-white dark:bg-stone-900 p-3 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow transition-shadow cursor-pointer">
+            <div onClick={() => goToVideo(video)} key={video.id} className="flex gap-3 bg-white dark:bg-stone-900 p-3 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow transition-all cursor-pointer group active:scale-[0.98] transform">
                 <div className="w-36 h-24 bg-stone-200 dark:bg-stone-800 rounded-lg flex-shrink-0 overflow-hidden relative">
-                    <img src={video.thumbnailUrl} className="w-full h-full object-cover" />
+                    <img src={video.thumbnailUrl} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     {video.isPaid && <div className="absolute top-1 left-1 bg-amber-500 text-white text-[8px] px-1 rounded font-bold">VIP</div>}
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col">
-                    <h4 className="font-bold text-stone-900 dark:text-stone-100 text-sm line-clamp-2 mb-1 leading-tight">{video.title}</h4>
+                    <h4 className="font-bold text-stone-900 dark:text-stone-100 text-sm line-clamp-2 mb-1 leading-tight group-hover:text-tcm-600 transition-colors">{video.title}</h4>
                     <div className="mt-auto text-xs text-stone-500 dark:text-stone-400">
                         <p>{video.views} 次觀看</p>
                         <p className="text-tcm-600 dark:text-tcm-400">已觀看</p>
@@ -1352,10 +1470,14 @@ const ProfileView = ({
       {activeTab === 'notifications' && isSelf && (
          <div className="space-y-3">
             {currentUser.notifications.length > 0 ? currentUser.notifications.map((n: any) => (
-               <div key={n.id} className={`p-4 rounded-xl border flex items-start gap-4 ${n.isRead ? 'bg-white dark:bg-stone-900 border-stone-100 dark:border-stone-800' : 'bg-tcm-50 dark:bg-tcm-900/20 border-tcm-100 dark:border-tcm-900'}`}>
+               <div 
+                    key={n.id} 
+                    onClick={() => handleNotificationClick(n)}
+                    className={`p-4 rounded-xl border flex items-start gap-4 cursor-pointer transition-all hover:shadow-sm active:scale-[0.99] transform ${n.isRead ? 'bg-white dark:bg-stone-900 border-stone-100 dark:border-stone-800' : 'bg-tcm-50 dark:bg-tcm-900/20 border-tcm-100 dark:border-tcm-900'}`}
+                >
                   <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${n.isRead ? 'bg-stone-300 dark:bg-stone-600' : 'bg-tcm-500'}`}></div>
                   <div className="flex-1">
-                     <p className="text-stone-800 dark:text-stone-200 text-sm font-medium">{n.content}</p>
+                     <p className="text-stone-800 dark:text-stone-200 text-sm font-medium hover:text-tcm-600 transition-colors">{n.content}</p>
                      <p className="text-stone-400 text-xs mt-1">{n.createdAt}</p>
                   </div>
                </div>
@@ -1370,9 +1492,9 @@ const ProfileView = ({
       {activeTab === 'posts' && (
          <div className="space-y-4">
             {displayPosts.length > 0 ? displayPosts.map((post: ForumPost) => (
-                <div key={post.id} className="bg-white dark:bg-stone-900 p-5 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow transition-shadow">
+                <div key={post.id} onClick={() => goToPost(post.id)} className="bg-white dark:bg-stone-900 p-5 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow transition-all cursor-pointer group active:scale-[0.99] transform">
                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-bold text-stone-900 dark:text-stone-100 text-lg">{post.title}</h4>
+                        <h4 className="font-bold text-stone-900 dark:text-stone-100 text-lg group-hover:text-tcm-600 transition-colors">{post.title}</h4>
                         {post.status === 'draft' && <span className="text-xs bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 px-2 py-0.5 rounded font-medium">草稿</span>}
                     </div>
                     <p className="text-sm text-stone-600 dark:text-stone-300 line-clamp-2 mb-3">{post.content}</p>
@@ -1431,7 +1553,7 @@ const ProfileView = ({
             <div className="bg-white dark:bg-stone-900 w-full max-w-2xl rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto border border-stone-100 dark:border-stone-700">
                 <div className="flex justify-between items-center mb-6 border-b border-stone-100 dark:border-stone-800 pb-4">
                     <h3 className="text-xl font-bold text-stone-800 dark:text-stone-100">編輯個人資料</h3>
-                    <button onClick={() => setIsEditMode(false)} className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300">
+                    <button onClick={() => setIsEditMode(false)} className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 active:scale-95 transition-transform">
                         <X size={24} />
                     </button>
                 </div>
@@ -1523,8 +1645,8 @@ const ProfileView = ({
                     </div>
                     
                     <div className="flex justify-end gap-3 pt-4 border-t border-stone-100 dark:border-stone-800">
-                        <button type="button" onClick={() => setIsEditMode(false)} className="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg">取消</button>
-                        <button type="submit" className="px-6 py-2 bg-tcm-600 text-white font-medium rounded-lg hover:bg-tcm-700 shadow-sm">儲存變更</button>
+                        <button type="button" onClick={() => setIsEditMode(false)} className="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg active:scale-95 transition-transform">取消</button>
+                        <button type="submit" className="px-6 py-2 bg-tcm-600 text-white font-medium rounded-lg hover:bg-tcm-700 shadow-sm active:scale-95 transition-transform">儲存變更</button>
                     </div>
                 </form>
             </div>
@@ -1537,7 +1659,7 @@ const ProfileView = ({
            <div className="bg-white dark:bg-stone-900 w-full max-w-xl rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto border border-stone-100 dark:border-stone-700">
              <div className="flex justify-between items-center mb-6">
                <h3 className="text-xl font-bold text-stone-800 dark:text-stone-100">上傳教學影片</h3>
-               <button onClick={() => setShowUpload(false)} className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300">
+               <button onClick={() => setShowUpload(false)} className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 active:scale-95 transition-transform">
                  <X size={24} />
                </button>
              </div>
@@ -1550,7 +1672,7 @@ const ProfileView = ({
                   <p className="text-sm font-bold text-stone-700 dark:text-stone-300">選擇影片檔案</p>
                   <p className="text-xs text-stone-500 dark:text-stone-400 mb-2">MP4, WebM (最大 500MB)</p>
                   <input type="file" accept="video/*" className="hidden" id="video-upload" />
-                  <label htmlFor="video-upload" className="inline-block bg-white dark:bg-stone-700 border border-stone-300 dark:border-stone-600 px-3 py-1 text-xs rounded font-medium cursor-pointer hover:bg-stone-50 dark:hover:bg-stone-600 dark:text-stone-200">瀏覽檔案</label>
+                  <label htmlFor="video-upload" className="inline-block bg-white dark:bg-stone-700 border border-stone-300 dark:border-stone-600 px-3 py-1 text-xs rounded font-medium cursor-pointer hover:bg-stone-50 dark:hover:bg-stone-600 dark:text-stone-200 active:scale-95 transition-transform">瀏覽檔案</label>
                </div>
 
                {/* 2. Cover Image */}
@@ -1609,13 +1731,13 @@ const ProfileView = ({
                </div>
 
                <div className="flex justify-between pt-4 border-t border-stone-100 dark:border-stone-800">
-                 <button type="submit" name="draft" className="flex items-center gap-2 px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg transition-colors">
+                 <button type="submit" name="draft" className="flex items-center gap-2 px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg transition-all active:scale-95 transform">
                     <Save size={18} />
                     儲存草稿
                  </button>
                  <div className="flex gap-2">
-                    <button type="button" onClick={() => setShowUpload(false)} className="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg">取消</button>
-                    <button type="submit" name="publish" className="px-6 py-2 bg-tcm-600 text-white font-medium rounded-lg hover:bg-tcm-700 shadow-sm">立即發佈</button>
+                    <button type="button" onClick={() => setShowUpload(false)} className="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg active:scale-95 transition-transform">取消</button>
+                    <button type="submit" name="publish" className="px-6 py-2 bg-tcm-600 text-white font-medium rounded-lg hover:bg-tcm-700 shadow-sm active:scale-95 transition-transform">立即發佈</button>
                  </div>
                </div>
              </form>
@@ -1640,7 +1762,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
                         </div>
                         <h2 className="text-xl font-bold">登入中醫智匯</h2>
                     </div>
-                    <button onClick={onClose} className="absolute top-4 right-4 text-white/70 hover:text-white">
+                    <button onClick={onClose} className="absolute top-4 right-4 text-white/70 hover:text-white active:scale-90 transition-transform">
                         <X size={24} />
                     </button>
                 </div>
@@ -1650,7 +1772,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
                     <div className="space-y-3">
                         <button 
                             onClick={() => onLogin('student')}
-                            className="w-full flex items-center p-3 border border-stone-200 dark:border-stone-700 rounded-xl hover:border-tcm-500 dark:hover:border-tcm-500 hover:bg-tcm-50 dark:hover:bg-tcm-900/20 transition-all group bg-white dark:bg-stone-800"
+                            className="w-full flex items-center p-3 border border-stone-200 dark:border-stone-700 rounded-xl hover:border-tcm-500 dark:hover:border-tcm-500 hover:bg-tcm-50 dark:hover:bg-tcm-900/20 transition-all group bg-white dark:bg-stone-800 active:scale-95 transform"
                         >
                             <img src={CURRENT_USER_STUDENT.avatarUrl} className="w-10 h-10 rounded-full mr-4 bg-stone-100" />
                             <div className="text-left">
@@ -1661,7 +1783,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
 
                         <button 
                              onClick={() => onLogin('master')}
-                             className="w-full flex items-center p-3 border border-stone-200 dark:border-stone-700 rounded-xl hover:border-amber-500 dark:hover:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all group bg-white dark:bg-stone-800"
+                             className="w-full flex items-center p-3 border border-stone-200 dark:border-stone-700 rounded-xl hover:border-amber-500 dark:hover:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all group bg-white dark:bg-stone-800 active:scale-95 transform"
                         >
                             <img src={CURRENT_USER_MASTER.avatarUrl} className="w-10 h-10 rounded-full mr-4 bg-stone-100" />
                             <div className="text-left">
@@ -1686,6 +1808,10 @@ const App = () => {
   const [viewingUserId, setViewingUserId] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   
+  // Lifted Content State for Deep Linking
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [viewingPostId, setViewingPostId] = useState<string | null>(null);
+
   // Auth State
   const [currentUser, setCurrentUser] = useState<User>(GUEST_USER);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -1717,6 +1843,17 @@ const App = () => {
   const handleViewUser = (userId: string) => {
       setViewingUserId(userId);
       setActiveTab('profile');
+  };
+
+  // Navigation Helpers
+  const goToVideo = (video: Video) => {
+      setSelectedVideo(video);
+      setActiveTab('videos');
+  };
+
+  const goToPost = (postId: string) => {
+      setViewingPostId(postId);
+      setActiveTab('forum');
   };
 
   return (
@@ -1776,6 +1913,8 @@ const App = () => {
                 videos={videos} 
                 posts={posts} 
                 triggerLogin={() => setShowLoginModal(true)}
+                goToVideo={goToVideo}
+                goToPost={goToPost}
             />
           )}
           {activeTab === 'chat' && (
@@ -1791,6 +1930,8 @@ const App = () => {
                 setPosts={setPosts} 
                 triggerLogin={() => setShowLoginModal(true)} 
                 onViewUser={handleViewUser}
+                viewingPostId={viewingPostId}
+                setViewingPostId={setViewingPostId}
             />
           )}
           {activeTab === 'videos' && (
@@ -1801,6 +1942,8 @@ const App = () => {
                 setCurrentUser={setCurrentUser} 
                 triggerLogin={() => setShowLoginModal(true)}
                 onViewUser={handleViewUser}
+                selectedVideo={selectedVideo}
+                setSelectedVideo={setSelectedVideo}
             />
           )}
           {activeTab === 'profile' && (
@@ -1813,6 +1956,8 @@ const App = () => {
                 triggerLogin={() => setShowLoginModal(true)}
                 viewingUserId={viewingUserId || currentUser.id}
                 onBackToSelf={() => setViewingUserId(currentUser.id)}
+                goToVideo={goToVideo}
+                goToPost={goToPost}
             />
           )}
         </div>

@@ -4,8 +4,8 @@ import { User, UserRole, ForumPost, Video, ChatSession } from './types';
 // Mock Notifications
 const MOCK_NOTIFICATIONS = [
   { id: 'n1', type: 'system', content: '歡迎加入中醫智匯！', isRead: true, createdAt: '2023-01-01' },
-  { id: 'n2', type: 'reply', content: '陳醫師回覆了您的文章', isRead: false, createdAt: '剛剛' },
-  { id: 'n3', type: 'like', content: '有人按讚了您的留言', isRead: false, createdAt: '1小時前' },
+  { id: 'n2', type: 'reply', content: '陳醫師回覆了您的文章：請問失眠有什麼...', isRead: false, createdAt: '剛剛', targetId: 'p1', targetType: 'post' },
+  { id: 'n3', type: 'like', content: '有人按讚了您的留言', isRead: false, createdAt: '1小時前', targetId: 'v1', targetType: 'video' },
 ] as const;
 
 export const GUEST_USER: User = {
